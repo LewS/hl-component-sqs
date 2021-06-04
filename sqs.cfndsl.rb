@@ -32,10 +32,31 @@ CloudFormation do
             FifoQueue true
             ContentBasedDeduplication queue['content_based_deduplication'] if queue.has_key?('content_based_deduplication')
           end
-
           Tags tags + [{ Key: 'Name', Value: FnJoin('-', [ Ref(:EnvironmentName), queue['name'] ]) }]
+          
       end
-
+      if queue.has_key?('policy')
+        QueuePolicy(logical_id + 'Policy') do
+        PolicyDocument(
+          'Version' => '2012-10-17',
+          'Statement' => [
+            {
+              'Sid' => 'Allow-SQS-Action',
+              'Effect' => 'Allow',
+              'Principal' => '*',
+              'Action' => [ queue['policy']['actions'] ],
+              'Resource' => Ref(logical_id) 
+              'Condition' => {
+                'ArnEquals' => {
+                  'aws:SourceArn' => [ queue['policy']['sourceArn'] ]
+                }
+              }
+            }
+          ]   
+        )   
+        Queues [ Ref( logical_id ) ]
+        end 
+      end
       Output("#{logical_id}QueueUrl") {
           Value(Ref(logical_id))
           Export FnSub("${EnvironmentName}-#{external_parameters[:component_name]}-#{logical_id}Url")
