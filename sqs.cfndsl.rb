@@ -45,7 +45,7 @@ CloudFormation do
               'Effect' => 'Allow',
               'Principal' => '*',
               'Action' => [ queue['policy']['actions'] ],
-              'Resource' => Ref(logical_id) 
+              'Resource' => Ref(logical_id), 
               'Condition' => {
                 'ArnEquals' => {
                   'aws:SourceArn' => [ queue['policy']['sourceArn'] ]
