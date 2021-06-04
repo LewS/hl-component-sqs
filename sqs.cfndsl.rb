@@ -49,7 +49,7 @@ CloudFormation do
               'Resource' => [ FnGetAtt( Ref(logical_id), 'Arn') ],
               'Condition' => {
                 'ArnEquals' => {
-                  'aws:SourceArn' => FnSub((FnGetAtt("#{srcArn}",:Arn)))
+                  'aws:SourceArn' => FnSub('',(FnGetAtt("#{srcArn}",:Arn)))
                 }
               }
             }
