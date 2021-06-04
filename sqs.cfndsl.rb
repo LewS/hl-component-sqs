@@ -45,10 +45,10 @@ CloudFormation do
               'Effect' => 'Allow',
               'Principal' => '*',
               'Action' => [ queue['policy']['actions'] ],
-              'Resource' => Ref(logical_id), 
+              'Resource' => [ FnGetAtt( Ref(logical_id), 'Arn') ], 
               'Condition' => {
                 'ArnEquals' => {
-                  'aws:SourceArn' => [ queue['policy']['sourceArn'] ]
+                  'aws:SourceArn' => [ FnGetAtt(queue['policy']['sourceArn'], 'Arn') ]
                 }
               }
             }
