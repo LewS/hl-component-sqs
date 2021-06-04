@@ -37,7 +37,6 @@ CloudFormation do
       end
       if queue.has_key?('policy')
         QueuePolicy(logical_id + 'Policy') do
-          srcArn = queue['policy']['sourceArn']
           PolicyDocument(
           'Version' => '2012-10-17',
           'Statement' => [
@@ -49,7 +48,7 @@ CloudFormation do
               'Resource' => [ FnGetAtt( Ref(logical_id), 'Arn') ],
               'Condition' => {
                 'ArnEquals' => {
-                  'aws:SourceArn' => FnSub("#{srcArn}")
+                  'aws:SourceArn' => queue['policy']['sourceArn'] 
                 }
               }
             }
