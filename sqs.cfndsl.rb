@@ -48,7 +48,7 @@ CloudFormation do
               'Resource' => [ FnGetAtt( Ref(logical_id), 'Arn') ], 
               'Condition' => {
                 'ArnEquals' => {
-                  'aws:SourceArn' => [ FnGetAtt(queue['policy']['sourceArn'], 'Arn') ]
+                  'aws:SourceArn' => queue['policy']['sourceArn']
                 }
               }
             }
